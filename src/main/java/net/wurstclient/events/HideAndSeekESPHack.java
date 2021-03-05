@@ -1,42 +1,36 @@
-package net.wurstclient.hacks;
+package net.wurstclient.events;
 
-import net.minecraft.client.sound.SoundEngine;
-import net.minecraft.client.sound.SoundListener;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.passive.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.wurstclient.SearchTags;
-import net.wurstclient.events.RenderListener;
-import net.wurstclient.events.UpdateListener;
 import net.wurstclient.hack.Hack;
 import net.wurstclient.util.RenderUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.system.CallbackI;
 
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @SearchTags({"farmhunt esp", "farm hunt esp"})
-public class FarmHuntESPHack extends Hack implements RenderListener {
+public class HideAndSeekESPHack extends Hack implements RenderListener {
 
     private static final Box FAKE_ANIMAL_BOX =
             new Box(-0.5, 0, -0.5, 0.5, 1, 0.5);
 
     private Set<Integer> tracking = Collections.synchronizedSet(new HashSet<>());
 
-    public FarmHuntESPHack() {
-        super("FarmHuntESP", "Allows you to see hiders in Hypixel Farm hunt");
+    public HideAndSeekESPHack() {
+        super("HideAndSeekESP", "Allows you to see hiders in TheHive Hide and Seek");
     }
 
     @Override
     public void onEnable() {
+        WURST.getHax().farmHuntESPHack.setEnabled(false);
         WURST.getHax().blockhuntESPHack.setEnabled(false);
-        WURST.getHax().hideAndSeekESPHack.setEnabled(false);
         tracking.clear();
 
         EVENTS.add(RenderListener.class, this);
@@ -73,14 +67,19 @@ public class FarmHuntESPHack extends Hack implements RenderListener {
 
         for (Entity e : MC.world.getEntities()) {
 
-            if (!(e instanceof HorseEntity || e instanceof ChickenEntity || e instanceof PigEntity ||
-                    e instanceof OcelotEntity || e instanceof CowEntity || e instanceof SheepEntity || e instanceof WolfEntity))
-                continue;
+            //if (Math.abs(e.pitch) > 0.001)
+//                tracking.add(e.getEntityId());
 
-            if (Math.abs(e.pitch) > 0.001)
+            if (e instanceof FallingBlockEntity)
                 tracking.add(e.getEntityId());
 
             if (!tracking.contains(e.getEntityId()))
+                continue;
+
+            //if (e instanceof Falling)
+
+
+            if (!(e instanceof FallingBlockEntity))
                 continue;
 
             GL11.glPushMatrix();

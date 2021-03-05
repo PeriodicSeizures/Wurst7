@@ -114,10 +114,10 @@ public final class TunnellerHack extends Hack
 		WURST.getHax().fightBotHack.setEnabled(false);
 		WURST.getHax().followHack.setEnabled(false);
 		WURST.getHax().instantBunkerHack.setEnabled(false);
-		WURST.getHax().nukerHack.setEnabled(false);
-		WURST.getHax().nukerLegitHack.setEnabled(false);
+		//WURST.getHax().nukerHack.setEnabled(false);
+		//WURST.getHax().nukerLegitHack.setEnabled(false);
 		WURST.getHax().protectHack.setEnabled(false);
-		WURST.getHax().speedNukerHack.setEnabled(false);
+		//WURST.getHax().speedNukerHack.setEnabled(false);
 		
 		// add listeners
 		EVENTS.add(UpdateListener.class, this);
@@ -162,9 +162,12 @@ public final class TunnellerHack extends Hack
 	public void onUpdate()
 	{
 		HackList hax = WURST.getHax();
-		Hack[] incompatibleHax = {hax.autoSwitchHack, hax.autoToolHack,
-			hax.autoWalkHack, hax.blinkHack, hax.flightHack,
-			hax.scaffoldWalkHack, hax.sneakHack};
+		//Hack[] incompatibleHax = {hax.autoSwitchHack, hax.autoToolHack,
+		//	hax.autoWalkHack, hax.blinkHack, hax.flightHack,
+		//	hax.scaffoldWalkHack, hax.sneakHack};
+		Hack[] incompatibleHax = {hax.autoToolHack,
+				hax.blinkHack, hax.flightHack,
+				hax.scaffoldWalkHack, hax.sneakHack};
 		for(Hack hack : incompatibleHax)
 			hack.setEnabled(false);
 		

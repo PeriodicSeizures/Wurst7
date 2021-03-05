@@ -51,6 +51,7 @@ public final class BlockHuntESPHack extends Hack implements RenderListener, Upda
     public void onEnable()
     {
         WURST.getHax().farmHuntESPHack.setEnabled(false);
+        WURST.getHax().hideAndSeekESPHack.setEnabled(false);
 
         tracking.clear();
         EVENTS.add(UpdateListener.class, this);

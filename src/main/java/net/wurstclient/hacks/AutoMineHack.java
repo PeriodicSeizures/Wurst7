@@ -33,9 +33,9 @@ public final class AutoMineHack extends Hack implements UpdateListener
 	public void onEnable()
 	{
 		WURST.getHax().excavatorHack.setEnabled(false);
-		WURST.getHax().nukerHack.setEnabled(false);
-		WURST.getHax().nukerLegitHack.setEnabled(false);
-		WURST.getHax().speedNukerHack.setEnabled(false);
+		//WURST.getHax().nukerHack.setEnabled(false);
+		//WURST.getHax().nukerLegitHack.setEnabled(false);
+		//WURST.getHax().speedNukerHack.setEnabled(false);
 		WURST.getHax().tunnellerHack.setEnabled(false);
 		
 		EVENTS.add(UpdateListener.class, this);

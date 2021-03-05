@@ -97,8 +97,8 @@ public final class SpeedNukerHack extends Hack
 		// disable other nukers
 		WURST.getHax().autoMineHack.setEnabled(false);
 		WURST.getHax().excavatorHack.setEnabled(false);
-		WURST.getHax().nukerHack.setEnabled(false);
-		WURST.getHax().nukerLegitHack.setEnabled(false);
+		//WURST.getHax().nukerHack.setEnabled(false);
+		//WURST.getHax().nukerLegitHack.setEnabled(false);
 		WURST.getHax().tunnellerHack.setEnabled(false);
 		
 		// add listeners
