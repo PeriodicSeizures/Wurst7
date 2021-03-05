@@ -51,6 +51,7 @@ public final class BlinkHack extends Hack
 	public void onEnable()
 	{
 		fakePlayer = new FakePlayerEntity();
+		//fakePlayer.
 		
 		EVENTS.add(UpdateListener.class, this);
 		EVENTS.add(PacketOutputListener.class, this);

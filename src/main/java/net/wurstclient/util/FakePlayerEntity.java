@@ -29,6 +29,8 @@ public class FakePlayerEntity extends OtherClientPlayerEntity
 		copyPlayerModel(player, this);
 		copyRotation();
 		resetCapeMovement();
+		setSneaking(player.isSneaking());
+
 		
 		spawn();
 	}
@@ -58,7 +60,16 @@ public class FakePlayerEntity extends OtherClientPlayerEntity
 		capeY = getY();
 		capeZ = getZ();
 	}
-	
+
+	/*
+		TODO:
+		might have to remove, testing out whether fake entity will with player
+	 */
+	@Override
+	public boolean collides() {
+		return false;
+	}
+
 	private void spawn()
 	{
 		world.addEntity(getEntityId(), this);

@@ -25,6 +25,7 @@ import net.wurstclient.event.EventManager;
 import net.wurstclient.events.UpdateListener;
 import net.wurstclient.hacks.*;
 import net.wurstclient.util.json.JsonException;
+import org.lwjgl.system.CallbackI;
 
 public final class HackList implements UpdateListener
 {
@@ -35,6 +36,7 @@ public final class HackList implements UpdateListener
 	public final AntiSpamHack antiSpamHack = new AntiSpamHack();
 	public final AntiWaterPushHack antiWaterPushHack = new AntiWaterPushHack();
 	public final AntiWobbleHack antiWobbleHack = new AntiWobbleHack();
+	public final ArrowDodgeHack arrowDodgeHack = new ArrowDodgeHack();
 	public final AutoArmorHack autoArmorHack = new AutoArmorHack();
 	public final AutoBuildHack autoBuildHack = new AutoBuildHack();
 	public final AutoDropHack autoDropHack = new AutoDropHack();
@@ -57,7 +59,9 @@ public final class HackList implements UpdateListener
 	public final AutoTotemHack autoTotemHack = new AutoTotemHack();
 	public final AutoWalkHack autoWalkHack = new AutoWalkHack();
 	public final BaseFinderHack baseFinderHack = new BaseFinderHack();
+	//public final BedwarsHack bedwarsHack = new BedwarsHack();
 	public final BlinkHack blinkHack = new BlinkHack();
+	public final BlockHuntESPHack blockhuntESPHack  = new BlockHuntESPHack();
 	public final BoatFlyHack boatFlyHack = new BoatFlyHack();
 	public final BonemealAuraHack bonemealAuraHack = new BonemealAuraHack();
 	public final BowAimbotHack bowAimbotHack = new BowAimbotHack();
@@ -77,6 +81,8 @@ public final class HackList implements UpdateListener
 	public final ExcavatorHack excavatorHack = new ExcavatorHack();
 	public final ExtraElytraHack extraElytraHack = new ExtraElytraHack();
 	public final FancyChatHack fancyChatHack = new FancyChatHack();
+	public final FarmHuntESPHack farmHuntESPHack = new FarmHuntESPHack();
+	public final FastBowHack fastBowHack = new FastBowHack();
 	public final FastBreakHack fastBreakHack = new FastBreakHack();
 	public final FastLadderHack fastLadderHack = new FastLadderHack();
 	public final FastPlaceHack fastPlaceHack = new FastPlaceHack();

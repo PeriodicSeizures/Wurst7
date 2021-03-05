@@ -108,6 +108,9 @@ public final class KillauraLegitHack extends Hack
 		"Filter armor stands", "Won't attack armor stands.", false);
 	private final CheckboxSetting filterCrystals = new CheckboxSetting(
 		"Filter end crystals", "Won't attack end crystals.", false);
+
+	private final CheckboxSetting filterHiders = new CheckboxSetting(
+			"Filter hiders", "Won't attack Blockhunt/Farmhunt hiders.", false);
 	
 	private Entity target;
 	
@@ -133,6 +136,7 @@ public final class KillauraLegitHack extends Hack
 		addSetting(filterNamed);
 		addSetting(filterStands);
 		addSetting(filterCrystals);
+		//addSetting(filterHiders);
 	}
 	
 	@Override
@@ -240,6 +244,13 @@ public final class KillauraLegitHack extends Hack
 		
 		if(filterCrystals.isChecked())
 			stream = stream.filter(e -> !(e instanceof EndCrystalEntity));
+
+		//if(filterHiders.isChecked())
+		//	stream = stream.filter(e ->
+		//			WURST.getHax().blockhuntESPHack.isEnabled() ?
+		//					!WURST.getHax().blockhuntESPHack.tracking.contains(e.getEntityId())
+		//					: !WURST.getHax().farmHuntESPHack.tracking.contains(e.getEntityId())
+		//			);
 		
 		target = stream.min(priority.getSelected().comparator).orElse(null);
 		if(target == null)

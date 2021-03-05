@@ -23,27 +23,27 @@ import net.wurstclient.util.RenderUtils;
 public final class ProphuntEspHack extends Hack implements RenderListener
 {
 	private static final Box FAKE_BLOCK_BOX =
-		new Box(-0.5, 0, -0.5, 0.5, 1, 0.5);
-	
+			new Box(-0.5, 0, -0.5, 0.5, 1, 0.5);
+
 	public ProphuntEspHack()
 	{
 		super("ProphuntESP", "Allows you to see fake blocks in Prophunt.\n"
-			+ "Made for Mineplex Prophunt. Might not work on other servers.");
+				+ "Made for Mineplex Prophunt. Might not work on other servers.");
 		setCategory(Category.RENDER);
 	}
-	
+
 	@Override
 	public void onEnable()
 	{
 		EVENTS.add(RenderListener.class, this);
 	}
-	
+
 	@Override
 	public void onDisable()
 	{
 		EVENTS.remove(RenderListener.class, this);
 	}
-	
+
 	@Override
 	public void onRender(float partialTicks)
 	{
@@ -56,38 +56,38 @@ public final class ProphuntEspHack extends Hack implements RenderListener
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_LIGHTING);
-		
+
 		GL11.glPushMatrix();
 		RenderUtils.applyRenderOffset();
-		
+
 		// set color
 		float alpha = 0.5F + 0.25F * MathHelper
-			.sin(System.currentTimeMillis() % 1000 / 500F * (float)Math.PI);
+				.sin(System.currentTimeMillis() % 1000 / 500F * (float)Math.PI);
 		GL11.glColor4f(1, 0, 0, alpha);
-		
+
 		// draw boxes
 		for(Entity entity : MC.world.getEntities())
 		{
 			if(!(entity instanceof MobEntity))
 				continue;
-			
+
 			if(!entity.isInvisible())
 				continue;
-			
+
 			if(MC.player.squaredDistanceTo(entity) < 0.25)
 				continue;
-			
+
 			GL11.glPushMatrix();
 			GL11.glTranslated(entity.getX(), entity.getY(), entity.getZ());
-			
+
 			RenderUtils.drawOutlinedBox(FAKE_BLOCK_BOX);
 			RenderUtils.drawSolidBox(FAKE_BLOCK_BOX);
-			
+
 			GL11.glPopMatrix();
 		}
-		
+
 		GL11.glPopMatrix();
-		
+
 		// GL resets
 		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);

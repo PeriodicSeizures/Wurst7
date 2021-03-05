@@ -243,6 +243,7 @@ public final class InstantBunkerHack extends Hack
 		// reset timer
 		IMC.setItemUseCooldown(4);
 	}
+
 	
 	@Override
 	public void onRender(float partialTicks)
