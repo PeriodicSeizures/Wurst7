@@ -30,7 +30,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @SearchTags({"blockhunt esp"})
-public final class BlockHuntESPHack extends Hack implements RenderListener, UpdateListener
+public final class BlockHuntESPHack extends Hack implements RenderListener
 {
     private static final Box FAKE_BLOCK_BOX =
             new Box(-0.5, 0, -0.5, 0.5, 1, 0.5);
@@ -54,7 +54,6 @@ public final class BlockHuntESPHack extends Hack implements RenderListener, Upda
         WURST.getHax().hideAndSeekESPHack.setEnabled(false);
 
         tracking.clear();
-        EVENTS.add(UpdateListener.class, this);
         EVENTS.add(RenderListener.class, this);
     }
 
@@ -62,88 +61,7 @@ public final class BlockHuntESPHack extends Hack implements RenderListener, Upda
     public void onDisable()
     {
         tracking.clear();
-        EVENTS.remove(UpdateListener.class, this);
         EVENTS.remove(RenderListener.class, this);
-    }
-
-    @Override
-    public void onUpdate() {
-
-        // mark all animals that are sus
-        // animals that are with a "jumping" velocity will be marked
-
-        // vel test
-        //System.out.println(MC.player.getVelocity().y);
-
-        // downward velocity capped to -.44 over 1 block falling
-        // upward velocity capped to .333 over 1 block ascent
-
-        ClientWorld world = MC.world;
-
-        if (world == null || MC.player == null) return;
-
-        for(Entity entity : world.getEntities()) {
-//entity.getMovementDirection().getUnitVector().
-            if(!(entity instanceof MobEntity))
-                continue;
-
-
-            if(MC.player.squaredDistanceTo(entity) < 0.25)
-                continue;
-
-
-            if (entity.isSwimming() || entity.isSubmergedInWater())
-                continue;
-
-
-            int id = entity.getEntityId();
-
-
-            if (entity.isInvisible())
-            {
-                tracking.add(id);
-                continue;
-            }
-
-
-            // -.1 max falling for a chicken
-            Vec3d v = entity.getVelocity();
-            if (entity instanceof ChickenEntity && v.y < -.18)
-            {
-                tracking.add(id);
-                continue;
-            }
-
-
-            // anything faster than a walking animal is also sus
-
-            double h = v.x*v.x + v.z*v.z;
-            if (h >= (THRESHOLD)*(THRESHOLD))
-            {
-                tracking.add(id);
-                continue;
-            }
-
-            // for cases where velocity is hard to track (direction instead of vel)
-            //Vec3d p = entity.getPos();
-
-
-
-            // slimes
-            if (entity instanceof SlimeEntity)
-            {
-                tracking.add(id);
-            }
-
-
-            // special case for hiders, if walks backwards
-            //if (entity.)
-        }
-
-        for (int id : tracking) {
-
-        }
-
     }
 
     @Override
@@ -174,16 +92,63 @@ public final class BlockHuntESPHack extends Hack implements RenderListener, Upda
         //float[] color = new float[] {0, 0, 0, alpha};
 
 
-        for (int id : tracking) {
+
+
+
+        for(Entity entity : world.getEntities()) {
+
+            if(!(entity instanceof MobEntity))
+                continue;
+
+
+            if(MC.player.squaredDistanceTo(entity) < 0.25)
+                continue;
+
+
+            if (entity.isSwimming() || entity.isSubmergedInWater())
+                continue;
+
+
+            int id = entity.getEntityId();
             if (MC.world.getEntityById(id) instanceof PlayerEntity) {
                 tracking.remove(id);
                 continue;
             }
 
+            Vec3d v = entity.getVelocity();
+            if (entity.isInvisible())
+            {
+                tracking.add(id);
+            }
 
-            Entity entity = world.getEntityById(id);
 
-            if (entity == null) continue;
+
+            if (entity instanceof ChickenEntity && v.y < -.18)
+            {
+                tracking.add(id);
+            }
+
+
+            // anything faster than a walking animal is also sus
+
+            double h = v.x*v.x + v.z*v.z;
+            if (h >= (THRESHOLD)*(THRESHOLD))
+            {
+                tracking.add(id);
+            }
+
+            // for cases where velocity is hard to track (direction instead of vel)
+            //Vec3d p = entity.getPos();
+
+
+            // slimes
+            if (entity instanceof SlimeEntity)
+            {
+                tracking.add(id);
+            }
+
+            if (!tracking.contains(id))
+                continue;
 
             GL11.glPushMatrix();
             GL11.glTranslated(entity.getX(), entity.getY(), entity.getZ());

@@ -8,6 +8,7 @@
 package net.wurstclient.hacks;
 
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -168,10 +169,19 @@ public final class KillauraLegitHack extends Hack
 	{
 		ClientPlayerEntity player = MC.player;
 		ClientWorld world = MC.world;
-		
-		if(player.getAttackCooldownProgress(0) < 1)
+
+		// [1, 1.2]
+		float randRequiredProgress = (float)(Math.random()*0.2);
+
+		// [0, 1]
+
+		if(player.getAttackCooldownProgress(0) < 1) // default is 1
 			return;
-		
+
+		// if player is eating from autoeat, then skip
+		if (WURST.getHax().autoEatHack.isEating())
+			return;
+
 		double rangeSq = Math.pow(range.getValue(), 2);
 		Stream<Entity> stream =
 			StreamSupport.stream(MC.world.getEntities().spliterator(), true)
@@ -190,7 +200,14 @@ public final class KillauraLegitHack extends Hack
 		if(filterSleeping.isChecked())
 			stream = stream.filter(e -> !(e instanceof PlayerEntity
 				&& ((PlayerEntity)e).isSleeping()));
-		
+
+		/*
+			TODO:
+			either I am a retard,
+			or it appears for values where filterFlying is != 0, this module fails to work correctly
+			(i.e. is literally does the opposite, hitting the player who is at least the given distance off the ground)
+		 */
+
 		if(filterFlying.getValue() > 0)
 			stream = stream.filter(e -> {
 				
@@ -199,7 +216,7 @@ public final class KillauraLegitHack extends Hack
 				
 				Box box = e.getBoundingBox();
 				box = box.union(box.offset(0, -filterFlying.getValue(), 0));
-				return world.isSpaceEmpty(box);
+				return !world.isSpaceEmpty(box); // I added the !
 			});
 		
 		if(filterMonsters.isChecked())
@@ -276,12 +293,15 @@ public final class KillauraLegitHack extends Hack
 		
 		// try to face center of boundingBox
 		Box bb = entity.getBoundingBox();
-		if(faceVectorClient(bb.getCenter()))
+		if(faceVectorClient(bb.getCenter())) // will always hit at a weirdly consistently low angle that might seem sus
 			return true;
-		
+
+		Optional<Vec3d> hit = bb.raycast(eyesPos,
+				eyesPos.add(lookVec.multiply(range.getValue())));
+
 		// if not facing center, check if facing anything in boundingBox
-		return bb.raycast(eyesPos,
-			eyesPos.add(lookVec.multiply(range.getValue()))) != null;
+		//return hit != null;
+		return hit.isPresent();
 	}
 	
 	private boolean faceVectorClient(Vec3d vec)
@@ -290,10 +310,16 @@ public final class KillauraLegitHack extends Hack
 		
 		float oldYaw = MC.player.prevYaw;
 		float oldPitch = MC.player.prevPitch;
-		
-		MC.player.yaw = limitAngleChange(oldYaw, rotation.getYaw(), 30);
+
+		// rand of [20, 40]
+		float change = (float)(Math.random()*20.0 + 20.0);
+		//float change = 30;
+
+		MC.player.yaw = limitAngleChange(oldYaw, rotation.getYaw(), change); // default 30
 		MC.player.pitch = rotation.getPitch();
-		
+
+
+
 		return Math.abs(oldYaw - rotation.getYaw())
 			+ Math.abs(oldPitch - rotation.getPitch()) < 1F;
 	}

@@ -29,6 +29,7 @@ public class HideAndSeekESPHack extends Hack implements RenderListener {
 
     @Override
     public void onEnable() {
+
         WURST.getHax().farmHuntESPHack.setEnabled(false);
         WURST.getHax().blockhuntESPHack.setEnabled(false);
         tracking.clear();
