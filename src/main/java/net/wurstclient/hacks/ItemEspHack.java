@@ -9,6 +9,12 @@ package net.wurstclient.hacks;
 
 import java.util.ArrayList;
 
+import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
+import net.minecraft.client.render.*;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Matrix4f;
+import net.wurstclient.events.GUIRenderListener;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.entity.Entity;
@@ -29,7 +35,7 @@ import net.wurstclient.util.RotationUtils;
 
 @SearchTags({"item esp", "ItemTracers", "item tracers"})
 public final class ItemEspHack extends Hack implements UpdateListener,
-	CameraTransformViewBobbingListener, RenderListener
+	CameraTransformViewBobbingListener, RenderListener //, GUIRenderListener
 {
 	private final CheckboxSetting names = new CheckboxSetting("Show item names",
 		"Sorry, this is currently broken!\n"
@@ -66,6 +72,7 @@ public final class ItemEspHack extends Hack implements UpdateListener,
 		EVENTS.add(UpdateListener.class, this);
 		EVENTS.add(CameraTransformViewBobbingListener.class, this);
 		EVENTS.add(RenderListener.class, this);
+		//EVENTS.add(GUIRenderListener.class, this);
 		
 		itemBox = GL11.glGenLists(1);
 		GL11.glNewList(itemBox, GL11.GL_COMPILE);
@@ -84,7 +91,7 @@ public final class ItemEspHack extends Hack implements UpdateListener,
 		EVENTS.remove(UpdateListener.class, this);
 		EVENTS.remove(CameraTransformViewBobbingListener.class, this);
 		EVENTS.remove(RenderListener.class, this);
-		
+		//EVENTS.remove(GUIRenderListener.class, this);
 		GL11.glDeleteLists(itemBox, 1);
 	}
 	
@@ -135,7 +142,33 @@ public final class ItemEspHack extends Hack implements UpdateListener,
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_LINE_SMOOTH);
 	}
-	
+
+	/*
+	@Override
+	public void onRenderGUI(MatrixStack matrixStack, float partialTicks) {
+		if(names.isChecked())
+		{
+			for(ItemEntity e : items)
+			{
+				ItemStack stack = e.getStack();
+				//GameRenderer.renderFloatingText(MC.textRenderer,
+				matrixStack.push();
+
+					matrixStack.translate(-MC.player.getX(), -MC.player.getY(), -MC.player.getZ());
+					Matrix4f mat = matrixStack.peek().getModel();
+
+					VertexConsumerProvider vcp = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+					MC.textRenderer.draw(
+						stack.getCount() + "x "
+								+ stack.getName().getString(),
+								0, 1, 0, false, mat, vcp, false, 0, 0xF);
+
+				matrixStack.pop();
+			}
+		}
+	}
+	 */
+
 	private void renderBoxes(double partialTicks, int regionX, int regionZ)
 	{
 		double extraSize = boxSize.getSelected().extraSize;
@@ -156,17 +189,6 @@ public final class ItemEspHack extends Hack implements UpdateListener,
 					e.getHeight() + extraSize, e.getWidth() + extraSize);
 				GL11.glCallList(itemBox);
 				GL11.glPopMatrix();
-			}
-			
-			if(names.isChecked())
-			{
-				// ItemStack stack = e.getStack();
-				// GameRenderer.renderFloatingText(MC.textRenderer,
-				// stack.getCount() + "x "
-				// + stack.getName().asFormattedString(),
-				// 0, 1, 0, 0, MC.getEntityRenderManager().cameraYaw,
-				// MC.getEntityRenderManager().cameraPitch, false);
-				// GL11.glDisable(GL11.GL_LIGHTING);
 			}
 			
 			GL11.glPopMatrix();

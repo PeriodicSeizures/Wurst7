@@ -7,6 +7,7 @@
  */
 package net.wurstclient.hacks;
 
+import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.ToDoubleFunction;
@@ -56,6 +57,9 @@ public final class KillauraLegitHack extends Hack
 {
 	private final SliderSetting range =
 		new SliderSetting("Range", 4.25, 1, 4.25, 0.05, ValueDisplay.DECIMAL);
+
+	private final SliderSetting skill =
+			new SliderSetting("Skill", .5, .1, 1, .1, ValueDisplay.DECIMAL);
 	
 	private final EnumSetting<Priority> priority = new EnumSetting<>("Priority",
 		"Determines which entity will be attacked first.\n"
@@ -110,8 +114,8 @@ public final class KillauraLegitHack extends Hack
 	private final CheckboxSetting filterCrystals = new CheckboxSetting(
 		"Filter end crystals", "Won't attack end crystals.", false);
 
-	private final CheckboxSetting filterHiders = new CheckboxSetting(
-			"Filter hiders", "Won't attack Blockhunt/Farmhunt hiders.", false);
+	//private final CheckboxSetting filterHiders = new CheckboxSetting(
+	//		"Filter hiders", "Won't attack Blockhunt/Farmhunt hiders.", false);
 	
 	private Entity target;
 	
@@ -121,6 +125,7 @@ public final class KillauraLegitHack extends Hack
 			+ "Not required on normal NoCheat+ servers!");
 		setCategory(Category.COMBAT);
 		addSetting(range);
+		addSetting(skill);
 		addSetting(priority);
 		addSetting(filterPlayers);
 		addSetting(filterSleeping);
@@ -170,13 +175,7 @@ public final class KillauraLegitHack extends Hack
 		ClientPlayerEntity player = MC.player;
 		ClientWorld world = MC.world;
 
-		// [1, 1.2]
-		float randRequiredProgress = (float)(Math.random()*0.2);
 
-		// [0, 1]
-
-		if(player.getAttackCooldownProgress(0) < 1) // default is 1
-			return;
 
 		// if player is eating from autoeat, then skip
 		if (WURST.getHax().autoEatHack.isEating())
@@ -200,13 +199,6 @@ public final class KillauraLegitHack extends Hack
 		if(filterSleeping.isChecked())
 			stream = stream.filter(e -> !(e instanceof PlayerEntity
 				&& ((PlayerEntity)e).isSleeping()));
-
-		/*
-			TODO:
-			either I am a retard,
-			or it appears for values where filterFlying is != 0, this module fails to work correctly
-			(i.e. is literally does the opposite, hitting the player who is at least the given distance off the ground)
-		 */
 
 		if(filterFlying.getValue() > 0)
 			stream = stream.filter(e -> {
@@ -272,17 +264,40 @@ public final class KillauraLegitHack extends Hack
 		target = stream.min(priority.getSelected().comparator).orElse(null);
 		if(target == null)
 			return;
-		
+
+		faceEntityClient(target);
+
 		WURST.getHax().autoSwordHack.setSlot();
+
+		// random attack timer
+		if (Math.random() + .05f > skill.getValueF())
+
+		if(player.getAttackCooldownProgress(0) < 1) // default is 1
+			return;
+
+		WURST.getHax().criticalsHack.doCritical();
+
+		try {
+			Method methodAttack = MC.getClass().getDeclaredMethod("doAttack");
+
+			methodAttack.setAccessible(true);
+			methodAttack.invoke(MC);
+			methodAttack.setAccessible(false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+
 		
 		// face entity
-		if(!faceEntityClient(target))
-			return;
-		
-		// attack entity
-		WURST.getHax().criticalsHack.doCritical();
+		//if(!faceEntityClient(target))
+		//	return;
+
+
+		/*
 		MC.interactionManager.attackEntity(player, target);
 		player.swingHand(Hand.MAIN_HAND);
+		 */
 	}
 	
 	private boolean faceEntityClient(Entity entity)
@@ -290,33 +305,56 @@ public final class KillauraLegitHack extends Hack
 		// get position & rotation
 		Vec3d eyesPos = RotationUtils.getEyesPos();
 		Vec3d lookVec = RotationUtils.getServerLookVec();
-		
+
 		// try to face center of boundingBox
-		Box bb = entity.getBoundingBox();
-		if(faceVectorClient(bb.getCenter())) // will always hit at a weirdly consistently low angle that might seem sus
+		Box bb = entity.getBoundingBox().expand(-.1f, -.2f, -.1f);
+
+		// shouldnt try to aim exactly for the middle every time
+		// might become suspicious with anticheats?
+
+
+		if (bb
+			.raycast(eyesPos, eyesPos.add(lookVec.multiply(range.getValue())))
+			.isPresent())
 			return true;
 
-		Optional<Vec3d> hit = bb.raycast(eyesPos,
-				eyesPos.add(lookVec.multiply(range.getValue())));
+		if(faceVectorClient(bb.getCenter().add(0, bb.getYLength()/5, 0))) // will always hit at a weirdly consistently low angle that might seem sus
+			return true;
 
-		// if not facing center, check if facing anything in boundingBox
-		//return hit != null;
-		return hit.isPresent();
+		//return bb
+		//		.raycast(eyesPos, eyesPos.add(lookVec.multiply(range.getValue())))
+		//		.isPresent();
+		return false;
 	}
 	
 	private boolean faceVectorClient(Vec3d vec)
 	{
 		Rotation rotation = RotationUtils.getNeededRotations(vec);
-		
+
 		float oldYaw = MC.player.prevYaw;
 		float oldPitch = MC.player.prevPitch;
 
-		// rand of [20, 40]
-		float change = (float)(Math.random()*20.0 + 20.0);
-		//float change = 30;
+		float yawDiff =	1f + (Math.abs(rotation.getYaw() - oldYaw) / 180f)*4;
 
-		MC.player.yaw = limitAngleChange(oldYaw, rotation.getYaw(), change); // default 30
-		MC.player.pitch = rotation.getPitch();
+		float variability = (1.0f - skill.getValueF()) + .1f;
+		float base = 7f * (skill.getValueF()) + 1f;
+		//float change = (float)(Math.random()*20.0 + 20.0);
+		float change = (float)(Math.random()*variability + base);
+
+
+
+
+
+		/*
+			TODO:
+			the larger the change in needed rotations, the greater the motion
+		 */
+
+		//HORIZONTAL
+		MC.player.yaw = limitAngleChange(oldYaw, rotation.getYaw(), change * yawDiff); // default 30
+
+		// VERTICAL
+		MC.player.pitch = limitAngleChange(oldPitch, rotation.getPitch(), change); // rotation.getPitch();
 
 
 

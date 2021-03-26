@@ -45,6 +45,7 @@ public final class NoFallHack extends Hack implements UpdateListener
 		super("NoFall", "Protects you from fall damage.");
 		setCategory(Category.MOVEMENT);
 		addSetting(mode);
+		//javax.crypto.spec.SecretKeySpec
 	}
 	
 	@Override

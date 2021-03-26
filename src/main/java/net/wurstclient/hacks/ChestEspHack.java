@@ -142,7 +142,7 @@ public class ChestEspHack extends Hack implements UpdateListener,
 		trappedChests.clear();
 		enderChests.clear();
 		shulkerBoxes.clear();
-		
+
 		for(BlockEntity blockEntity : MC.world.blockEntities)
 			if(blockEntity instanceof TrappedChestBlockEntity)
 			{
@@ -151,14 +151,14 @@ public class ChestEspHack extends Hack implements UpdateListener,
 				if(box != null)
 					trappedChests.add(box);
 				
-			}else if(blockEntity instanceof ChestBlockEntity)
+			} else if(blockEntity instanceof ChestBlockEntity)
 			{
 				Box box = getBoxFromChest((ChestBlockEntity)blockEntity);
 				
 				if(box != null)
 					basicChests.add(box);
 				
-			}else if(blockEntity instanceof EnderChestBlockEntity)
+			} else if(blockEntity instanceof EnderChestBlockEntity)
 			{
 				BlockPos pos = blockEntity.getPos();
 				if(!BlockUtils.canBeClicked(pos))
@@ -167,7 +167,7 @@ public class ChestEspHack extends Hack implements UpdateListener,
 				Box bb = BlockUtils.getBoundingBox(pos);
 				enderChests.add(bb);
 				
-			}else if(blockEntity instanceof ShulkerBoxBlockEntity)
+			} else if(blockEntity instanceof ShulkerBoxBlockEntity)
 			{
 				BlockPos pos = blockEntity.getPos();
 				if(!BlockUtils.canBeClicked(pos))
@@ -176,7 +176,7 @@ public class ChestEspHack extends Hack implements UpdateListener,
 				Box bb = BlockUtils.getBoundingBox(pos);
 				shulkerBoxes.add(bb);
 				
-			}else if(blockEntity instanceof BarrelBlockEntity)
+			} else if(blockEntity instanceof BarrelBlockEntity)
 			{
 				BlockPos pos = blockEntity.getPos();
 				if(!BlockUtils.canBeClicked(pos))

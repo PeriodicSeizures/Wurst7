@@ -11,6 +11,7 @@ import net.wurstclient.Category;
 import net.wurstclient.SearchTags;
 import net.wurstclient.events.UpdateListener;
 import net.wurstclient.hack.Hack;
+import net.wurstclient.settings.EnumSetting;
 
 @SearchTags({"jet pack"})
 public final class JetpackHack extends Hack implements UpdateListener

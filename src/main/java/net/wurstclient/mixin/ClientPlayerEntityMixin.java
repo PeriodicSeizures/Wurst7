@@ -162,6 +162,14 @@ public class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	@Override
 	protected boolean clipAtLedge()
 	{
+	    //if (super.clipAtLedge() || WurstClient.INSTANCE.getHax().safeWalkHack.isEnabled()) {
+		//	if (WurstClient.INSTANCE.getHax().safeWalkHack.mode.getSelected() == SafeWalkHack.Mode.LEGIT) {
+		//		WurstClient.MC.options.keySneak.setPressed(true);
+		//	}
+		//	return true;
+        //}
+        //return false;
+
 		return super.clipAtLedge()
 			|| WurstClient.INSTANCE.getHax().safeWalkHack.isEnabled();
 	}

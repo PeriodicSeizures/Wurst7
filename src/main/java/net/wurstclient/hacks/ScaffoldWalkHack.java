@@ -22,6 +22,7 @@ import net.wurstclient.Category;
 import net.wurstclient.SearchTags;
 import net.wurstclient.events.UpdateListener;
 import net.wurstclient.hack.Hack;
+import net.wurstclient.settings.EnumSetting;
 import net.wurstclient.util.BlockUtils;
 import net.wurstclient.util.RotationUtils;
 import net.wurstclient.util.RotationUtils.Rotation;
@@ -30,6 +31,13 @@ import net.wurstclient.util.RotationUtils.Rotation;
 	"auto bridge", "tower"})
 public final class ScaffoldWalkHack extends Hack implements UpdateListener
 {
+
+	//private final EnumSetting<Mode> mode = new EnumSetting<>("Mode",
+	//		"\u00a7lNormal\u00a7r mode makes it look like you're\n"
+	//				+ "incapable of falling off.\n"
+	//				+ "\u00a7lCrouch\u00a7r mode is legit sneak bridging.",
+	//		Mode.values(), Mode.NORMAL);
+
 	public ScaffoldWalkHack()
 	{
 		super("ScaffoldWalk", "Automatically places blocks below your feet.");
@@ -88,7 +96,9 @@ public final class ScaffoldWalkHack extends Hack implements UpdateListener
 		// set slot
 		int oldSlot = MC.player.inventory.selectedSlot;
 		MC.player.inventory.selectedSlot = newSlot;
-		
+
+		// scaffold sometimes fails because it will only place a block below player,
+		// in instances where the player is building diagonally, this might fail
 		placeBlock(belowPlayer);
 		
 		// reset slot
@@ -138,4 +148,21 @@ public final class ScaffoldWalkHack extends Hack implements UpdateListener
 		
 		return false;
 	}
+
+	//private enum Mode
+	//{
+	//	NORMAL("Normal"),
+	//	CROUCH("Crouch Bridging");
+	//	private final String name;
+	//	private Mode(String name)
+	//	{
+	//		this.name = name;
+	//	}
+	//	@Override
+	//	public String toString()
+	//	{
+	//		return name;
+	//	}
+	//}
+
 }

@@ -10,10 +10,12 @@ package net.wurstclient.hacks;
 import net.wurstclient.Category;
 import net.wurstclient.SearchTags;
 import net.wurstclient.hack.Hack;
+import net.wurstclient.settings.EnumSetting;
 
 @SearchTags({"safe walk"})
 public final class SafeWalkHack extends Hack
 {
+
 	public SafeWalkHack()
 	{
 		super("SafeWalk", "Prevents you from falling off edges.");
@@ -25,4 +27,5 @@ public final class SafeWalkHack extends Hack
 	{
 		WURST.getHax().parkourHack.setEnabled(false);
 	}
+
 }

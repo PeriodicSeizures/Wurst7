@@ -22,11 +22,10 @@ import net.minecraft.util.crash.CrashException;
 import net.minecraft.util.crash.CrashReport;
 import net.wurstclient.WurstClient;
 import net.wurstclient.event.EventManager;
-import net.wurstclient.events.HideAndSeekESPHack;
+import net.wurstclient.hacks.HideAndSeekESPHack;
 import net.wurstclient.events.UpdateListener;
 import net.wurstclient.hacks.*;
 import net.wurstclient.util.json.JsonException;
-import org.lwjgl.system.CallbackI;
 
 public final class HackList implements UpdateListener
 {
@@ -60,7 +59,7 @@ public final class HackList implements UpdateListener
 	public final AutoTotemHack autoTotemHack = new AutoTotemHack();
 	//public final AutoWalkHack autoWalkHack = new AutoWalkHack();
 	public final BaseFinderHack baseFinderHack = new BaseFinderHack();
-	//public final BedwarsHack bedwarsHack = new BedwarsHack();
+	public final BedwarsHack bedwarsHack = new BedwarsHack();
 	public final BlinkHack blinkHack = new BlinkHack();
 	public final BlockHuntESPHack blockhuntESPHack  = new BlockHuntESPHack();
 	public final BoatFlyHack boatFlyHack = new BoatFlyHack();

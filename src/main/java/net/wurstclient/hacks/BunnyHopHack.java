@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.wurstclient.Category;
+import net.wurstclient.RotationFaker;
 import net.wurstclient.SearchTags;
 import net.wurstclient.events.UpdateListener;
 import net.wurstclient.hack.Hack;

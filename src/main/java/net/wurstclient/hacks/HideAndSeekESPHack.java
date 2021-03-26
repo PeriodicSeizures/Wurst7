@@ -1,4 +1,4 @@
-package net.wurstclient.events;
+package net.wurstclient.hacks;
 
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
@@ -7,6 +7,7 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.wurstclient.SearchTags;
+import net.wurstclient.events.RenderListener;
 import net.wurstclient.hack.Hack;
 import net.wurstclient.util.RenderUtils;
 import org.lwjgl.opengl.GL11;

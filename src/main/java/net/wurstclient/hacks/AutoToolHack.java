@@ -99,7 +99,7 @@ public final class AutoToolHack extends Hack
 		prevSelectedSlot = -1;
 	}
 	
-	public void equipIfEnabled(BlockPos pos)
+	void equipIfEnabled(BlockPos pos)
 	{
 		if(!isEnabled())
 			return;
@@ -108,7 +108,7 @@ public final class AutoToolHack extends Hack
 			repairMode.isChecked());
 	}
 	
-	public void equipBestTool(BlockPos pos, boolean useSwords, boolean useHands,
+	void equipBestTool(BlockPos pos, boolean useSwords, boolean useHands,
 		boolean repairMode)
 	{
 		ClientPlayerEntity player = MC.player;

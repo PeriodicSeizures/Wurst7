@@ -42,6 +42,7 @@
     "MiningToolItemMixin",
     "MouseMixin",
     "MultiplayerScreenMixin",
+    "PlayerEntityMixin",
     "PlayerInventoryMixin",
     "PlayerSkinProviderMixin",
     "RenderTickCounterMixin",
